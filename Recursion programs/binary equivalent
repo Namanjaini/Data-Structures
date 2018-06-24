@@ -1,0 +1,32 @@
+#include<iostream>
+using namespace std;
+
+void binary(int a)
+{
+    int r=a%2;
+    a=a/2;
+
+    if(a==0)
+    {
+        cout<<r<<" ";
+        return ;
+    }
+
+    else if(a>0)
+    {
+        binary(a);
+    }
+
+    cout<<r<<" ";
+
+}
+
+int main()
+{
+    int n;
+    cout<<"Enter the decimal no."<<endl;
+    cin>>n;
+
+    binary(n);
+
+}
