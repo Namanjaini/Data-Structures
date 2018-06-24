@@ -1,0 +1,23 @@
+#include<iostream>
+using namespace std;
+int mul(int m,int n)
+{
+    if(n==0)
+    {
+        return 0;
+    }
+    else
+    {
+        return(m+mul(m,n-1));
+    }
+}
+
+int main()
+{
+    int n,m;
+    cout<<"Enter the two no. : "<<endl;
+    cin>>n>>m;
+
+    int f=mul(n,m);
+    cout<<"Multiply is: "<<f<<endl;
+}
