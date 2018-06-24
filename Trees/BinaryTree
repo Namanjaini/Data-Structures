@@ -1,0 +1,486 @@
+#include<iostream>
+using namespace std;
+
+  int i=0;
+template<class T>
+
+class Node
+{
+    public:
+    T key;
+    Node<T>* right;
+    Node<T>* left;
+};
+
+template<class T>
+class Tree
+{
+    public:
+
+    Node<T>* Root;
+
+    Tree()
+    {
+        Root=NULL;
+    }
+
+    Node<T>* createNode(T data)
+    {
+        Node<T>* temp=new Node<T>;
+
+        temp->key=data;
+        temp->left=NULL;
+        temp->right=NULL;
+
+        return temp;
+    }
+
+    void Insert(Node<T>* temp,T data)
+    {
+        //INSERTING THE ROOT...
+        if(Root==NULL)
+        {
+            Root=createNode(data);
+        }
+
+
+        //INSERTING THE AFTER THE ROOT
+        else
+        {
+
+            //IF THE ELEMENT IS ALREADY PRESENT...
+            if(temp->key==data)
+            {
+                cout<<"Can't Insert the data "<<data<<" as it is already present..."<<endl;
+                return;
+            }
+
+
+            //IF THE ELEMENT IS NEW...
+            else
+            {
+
+            // TO THE RIGHT...
+                if(temp->key<data)
+                {
+                    if(temp->right!=NULL)
+                    {
+                        //RECURSION TO THE RIGHT...
+                        Insert(temp->right,data);
+                    }
+
+                    else
+                    {
+                        temp->right=createNode(data);
+                    }
+                }
+
+
+            // TO THE LEFT...
+
+                else
+                {
+                    if(temp->left!=NULL)
+                    {
+                         //RECURSION TO THE LEFT...
+                        Insert(temp->left,data);
+                    }
+
+                    else
+                    {
+                    temp->left=createNode(data);
+                    }
+                }
+            }
+        }
+
+
+    }//INSERT ENDED...
+
+
+    void InOrder(Node<T>* Root)
+    {
+        if(Root!=NULL)
+        {
+
+            InOrder(Root->left);
+
+            cout<<Root->key<<" ";
+
+            InOrder((Root->right));
+        }
+    }
+
+    void PreOrder(Node<T>* Root)
+    {
+        if(Root!=NULL)
+        {
+            cout<<Root->key<<" ";
+
+            PreOrder(Root->left);
+
+            PreOrder(Root->right);
+        }
+    }
+
+    void PostOrder(Node<T>* Root)
+    {
+        if(Root!=NULL)
+        {
+            PostOrder(Root->left);
+
+            PostOrder(Root->right);
+
+            cout<<Root->key<<" ";
+        }
+    }
+
+
+    void MorrisInorder(Node<T> *Root)
+{
+ Node<T> *p,*temp;
+ p=Root;
+ while(p!=NULL)
+ {
+     if(p->left==NULL)
+     {
+         cout<<p->key<<" ";
+         p=p->right;
+     }
+     else
+     {
+         temp=p->left;
+         while(temp->right!=NULL && temp->right!=p)
+            temp=temp->right;
+
+          if(temp->right==NULL)
+         {
+             temp->right=p;
+             p=p->left;
+         }
+         else
+         {
+             cout<<p->key<<" ";
+             temp->right=NULL;
+             p=p->right;
+         }
+     }
+ }
+}
+
+
+    Node<T>* Search(Node<T>* Root,T data)
+    {
+        if(Root==NULL||Root->key==data)
+        {
+            return Root;
+        }
+
+        if(data<Root->key)
+        {
+            Search(Root->left,data);
+        }
+
+        if(data>Root->key)
+        {
+            Search(Root->right,data);
+        }
+    }
+
+
+    int Maximum(Node<T>* temp)
+    {
+        while(temp->right!=NULL)
+            temp=temp->right;
+
+        return temp->key;
+    }
+
+      int Minimum(Node<T>* temp)
+    {
+        while(temp->left!=NULL)
+            temp=temp->left;
+
+        return temp->key;
+    }
+
+    int CountTotalNodes(Node<T>* Root)
+    {
+        if(Root==NULL)
+        {
+            return 0;
+        }
+
+        return (CountTotalNodes(Root->left) + CountTotalNodes(Root->right)+1);
+    }
+
+    int CountInternalNodes(Node<T>* Root)
+    {
+        if(Root==NULL||((Root->left==NULL)&&(Root->right==NULL)))
+           {
+               return 0;
+           }
+
+           return (CountInternalNodes(Root->left) + CountInternalNodes(Root->right) + 1 );
+    }
+
+
+    int CountLeafNodes(Node<T>* Root)
+    {
+        if(Root==NULL)
+        {
+            return 0;
+        }
+
+        else if(Root->left==NULL&&Root->right==NULL)
+        {
+            return 1;
+        }
+
+        return (CountLeafNodes(Root->left) + CountLeafNodes(Root->right) );
+    }
+
+    int CountLeftNodes(Node<T>* Root)
+    {
+        int Count=0;
+
+        if(Root==NULL)
+        {
+            return 0;
+        }
+
+        if(Root->left!=NULL)
+            Count=Count+ CountLeftNodes(Root->left)+1;
+
+        if(Root->right!=NULL)
+            Count=Count+CountLeftNodes(Root->right);
+
+        return Count;
+    }
+
+    int CountRightNodes(Node<T>* Root)
+    {
+        int Count=0;
+
+        if(Root==NULL)
+        {
+            return 0;
+        }
+
+        if(Root->left!=NULL)
+            Count=Count+ CountLeftNodes(Root->left);
+
+        if(Root->right!=NULL)
+            Count=Count+CountLeftNodes(Root->right)+1;
+
+        return Count;
+    }
+};
+
+
+int main()
+{
+
+    Tree<int> obj;
+    int temp;
+    Node<int> * t=NULL;
+
+    char ch;
+
+    int opt;
+
+    do
+    {
+    int n;
+    i++;
+    cout<<endl<<"Enter the Element No. "<<i<<endl;
+    cin>>n;
+    obj.Insert(obj.Root,n);
+
+    cout<<endl<<"Insert again (Y/N) : ";
+    cin>>ch;
+    }while(ch=='y'||ch=='Y');
+
+    do
+    {
+        cout<<endl<<endl<<"<========== MENU ==========>"<<endl<<endl;
+        cout<<"1.) Traversal By Recursion "<<endl;
+        cout<<"2.) Traversal By Morris Method "<<endl;
+        cout<<"3.) Search "<<endl;
+        cout<<"4.) Insert "<<endl;
+        cout<<"5.) Maximum Node "<<endl;
+        cout<<"6.) Minimum Node "<<endl;
+        cout<<"7.) Total Nodes "<<endl;
+        cout<<"8.) Internal Nodes "<<endl;
+        cout<<"9.) Leaf Nodes "<<endl;
+        cout<<"10.) Count Left Nodes "<<endl;
+        cout<<"11.) Count Right Nodes "<<endl;
+        cout<<endl<<"Enter the Choice : ";
+        cin>>opt;
+
+
+        switch(opt)
+        {
+
+            //Traversal By Recursion
+        case 1:
+            int m;
+        cout<<endl<<"1.) InOrder Traversal "<<endl;
+        cout<<endl<<"2.) Pre Order Traversal "<<endl;
+        cout<<endl<<"3.) Post Order Traversal "<<endl;
+        cin>>m;
+
+            switch(m)
+            {
+
+                //InOrder Traversal
+            case 1:
+            cout<<endl;
+            obj.InOrder(obj.Root);
+            cout<<endl;
+            break;
+
+            //Pre Order Traversal
+            case 2:
+            cout<<endl;
+            obj.PreOrder(obj.Root);
+            cout<<endl;
+            break;
+
+
+            //Post Order Traversal
+            case 3:
+            obj.PostOrder(obj.Root);
+            break;
+            }
+
+        break;
+
+
+
+        //TRAVERSAL BY MORRIS METHOD
+      /*  case 2:
+
+        cout<<endl<<"1.) InOrder Traversal "<<endl;
+        cout<<endl<<"2.) Pre Order Traversal "<<endl;
+        cout<<endl<<"3.) Post Order Traversal "<<endl;
+        cin>>m;
+
+            switch(m)
+            {
+
+                //InOrder Traversal
+            case 1:
+            cout<<endl;
+            obj.MorrisInOrder(obj.Root);
+            cout<<endl;
+            break;
+
+            //Pre Order Traversal
+            case 2:
+            cout<<endl;
+            obj.MorrisPreOrder(obj.Root);
+            cout<<endl;
+            break;
+
+
+            //Post Order Traversal
+            case 3:
+            obj.MorrisPostOrder(obj.Root);
+            break;
+            }
+
+        break;*/
+
+
+
+            //SEARCHING...
+            case 3:
+                int data;
+                cout<<endl<<"Enter the key to be search : ";
+                cin>>data;
+
+                t=obj.Search(obj.Root,data);
+
+                cout<<endl<<"Element "<<t->key<<" is present..."<<endl;
+
+                break;
+
+
+            //INSERTING...
+            case 4:
+                    cout<<endl<<"Enter the Element to insert "<<endl;
+                    cin>>temp;
+                    obj.Insert(obj.Root,temp);
+
+                    break;
+
+
+            //MAXIMUM NODE...
+            case 5:
+               temp=obj.Maximum(obj.Root);
+
+               cout<<endl<<"Maximum Node have the data : "<<temp;
+
+                    break;
+
+            //MINIMUM NODE...
+            case 6:
+               temp=obj.Minimum(obj.Root);
+
+               cout<<endl<<"Minimum Node have the data : "<<temp;
+
+                    break;
+
+            //COUNT TOTAL NODES...
+            case 7:
+               temp=obj.CountTotalNodes(obj.Root);
+
+               cout<<endl<<"Total Nodes are : "<<temp;
+
+                break;
+
+            //COUNT INTERNAL NODES...
+            case 8:
+               temp=obj.CountInternalNodes(obj.Root);
+
+               cout<<endl<<"Total Internal Nodes are : "<<temp;
+
+                break;
+
+
+           //COUNT LEAF NODES...
+            case 9:
+               temp=obj.CountLeafNodes(obj.Root);
+
+               cout<<endl<<"Total Leaf Nodes are : "<<temp;
+
+                break;
+
+
+             //COUNT LEFT NODES
+            case 10:
+               temp=obj.CountLeftNodes(obj.Root);
+
+               cout<<endl<<"Total Left Nodes are : "<<temp;
+
+                break;
+
+
+             //COUNT RIGHT NODES
+            case 11:
+               temp=obj.CountRightNodes(obj.Root);
+
+               cout<<endl<<"Total Right Nodes are : "<<temp;
+
+                break;
+        }
+
+
+
+        cout<<endl<<endl<<"Do again (Y/N) : ";
+        cin>>ch;
+    }while(ch=='y'||ch=='Y');
+
+
+}
