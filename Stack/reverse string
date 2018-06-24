@@ -1,0 +1,114 @@
+
+#include<iostream>
+using namespace std;
+
+#define  SIZE 30
+
+template<class T>
+class Stack
+{
+    T element[SIZE];
+    int top=-1;
+
+public:
+    void create_empty_stack()
+    {
+        top=-1;
+    }
+
+  int isEmpty()
+  {
+    if(top==-1)
+    {
+        return 1;
+    }
+
+    else
+    {
+        return 0;
+    }
+  }
+
+  int isFull()
+  {
+    if(top==SIZE-1)
+    {
+        return 1;
+    }
+
+    else
+    {
+        return 0;
+    }
+  }
+
+
+  void push(T a)
+{
+
+    if(this->isFull()==1)
+    {
+        cout<<endl<<"OVERFLOW..."<<endl;
+    }
+
+    else
+    {
+    top++;
+    element[top]=a;
+    }
+
+}
+
+T pop()
+{
+
+  if(this->isEmpty()==1)
+    {
+        cout<<endl<<"UNDERFLOW..."<<endl;
+        return 0;
+    }
+
+    else
+    {
+    T temp=element[top];
+    top--;
+    return temp;
+    }
+}
+
+int peek()
+{
+    int temp=element[top];
+    return temp;
+}
+
+int Size()
+{
+
+    return (top+1);
+}
+};
+
+
+int main()
+{
+    Stack <char>s;
+
+    s.create_empty_stack();
+
+    string str;
+    cout<<"Enter the string to reverse."<<endl;
+    cin>>str;
+
+    s.create_empty_stack();
+
+    for(int i=0;i<str.length();i++)
+    {
+    s.push(str[i]);
+    }
+
+    for(int i=0;i<str.length();i++)
+    {
+    cout<<s.pop();
+    }
+}
