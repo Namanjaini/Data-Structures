@@ -1,0 +1,115 @@
+#include<iostream>
+using namespace std;
+
+#define SIZE 30
+
+struct Stack
+{
+    int element[SIZE];
+    int top=-1;
+}s1;
+
+void create_empty_stack(Stack *s)
+{
+    (*s).top=-1;
+}
+
+int isEmpty(Stack *s)
+{
+    if((*s).top==-1)
+    {
+        return 1;
+    }
+
+    else
+    {
+        return 0;
+    }
+}
+
+
+int isFull(Stack *s)
+{
+    if((*s).top==SIZE-1)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void push(Stack *s,int a)
+{
+    (*s).top++;
+    (*s).element[(*s).top]=a;
+}
+
+int pop(Stack *s)
+{
+    int temp=(*s).element[(*s).top];
+    (*s).top--;
+    return temp;
+}
+
+int peek(Stack *s)
+{
+    int temp=(*s).element[(*s).top];;
+    return temp;
+}
+
+int Size(Stack *s)
+{
+
+    return ((*s).top+1);
+}
+
+
+int main()
+{
+    create_empty_stack(&s1);
+
+    if(isEmpty(&s1)==1)
+    {
+        cout<<"Your stack is empty..."<<endl;
+    }
+    else
+        cout<<"Does not empty..."<<endl;
+
+    if(isFull(&s1)==1)
+    {
+        cout<<"Your stack is Full..."<<endl;
+    }
+    else
+        cout<<"Does not Not full..."<<endl;
+        char ch;
+        do
+        {
+            int n;
+            cout<<endl<<endl<<"<---Choose--->"<<endl;
+            cout<<"1. Push"<<endl;
+            cout<<"2. Pop"<<endl;
+            cin>>n;
+
+            if(n==1)
+            {
+                int item;
+                cout<<endl<<"Enter Element to push"<<endl;
+                cin>>item;
+                push(&s1,item);
+            }
+            if(n==2)
+            {
+                int temp=pop(&s1);
+              cout<<"Popped element:"<<temp<<endl;
+            }
+
+
+            cout<<endl<<"Do again(Y/N)"<<endl;
+            cin>>ch;
+        }while(ch=='y'||ch=='Y');
+
+
+
+}
