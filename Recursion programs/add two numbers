@@ -1,0 +1,23 @@
+#include<iostream>
+using namespace std;
+int add(int m,int n)
+{
+    if(n==0)
+    {
+        return m;
+    }
+    else
+    {
+        return(add(m+1,n-1));
+    }
+}
+
+int main()
+{
+    int n,m;
+    cout<<"Enter the two no. : "<<endl;
+    cin>>n>>m;
+
+    int f=add(n,m);
+    cout<<"Sum is: "<<f<<endl;
+}
