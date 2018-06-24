@@ -1,0 +1,426 @@
+#include<iostream>
+using namespace std;
+
+template<class T>
+class Node
+{
+   public:
+  T key;
+  Node* left;
+  Node* right;
+};
+
+template<class T>
+class Tree
+{
+ public:
+ Node<T>*  Root;
+
+ Tree()
+ {
+  Root=NULL;
+ }
+
+ Node<T>* create_node(T key);
+ void insert(Node<T>*, T key);
+ T deletion_by_copying();
+ T deletion_by_merging();
+ T inorder_successor(Node<T>*, T key);
+ T inorder_predecessor(Node<T>*,T key);
+ Node<T>* search(Node<T>* Root,T data);
+ T maximum(Node<T>*);
+ T minimum(Node<T>*);
+ void level_order_traversal(Node<T>*);
+ void Preorder(Node<T>*);
+ void Inorder(Node<T>*);
+ void Postorder(Node<T>*);
+ int count_total_nodes(Node<T>*);
+ int count_leaf_nodes(Node<T>*);
+ int count_left_nodes(Node<T>*);
+ int count_right_nodes(Node<T>*);
+ int count_internal_nodes(Node<T>*);
+ int height(Node<T>*);
+ void morris_inorder(Node<T>*);
+ void morris_preorder(Node<T>*);
+};
+
+template<class T>
+Node<T>* Tree<T>::create_node(T data)
+{
+    Node<T>* temp=new Node<T>;
+    temp->key=data;
+    temp->left=NULL;
+    temp->right=NULL;
+
+    return temp;
+
+}
+template<class T>
+void Tree<T>::insert(Node<T>* temp,T data)
+{
+ if(Root==NULL)
+ {
+     Root=new Node<T>;
+     Root->key=data;
+     Root->left=NULL;
+     Root->right=NULL;
+ }
+else
+{
+ if(temp->key==data)
+ {
+     cout<<"Node with "<<data<<" as key is already present";
+ }
+ else
+ {
+   if(temp->key<data)
+   {
+    if(temp->right!=NULL)
+    {
+        insert(temp->right,data);
+    }
+    else
+    {
+        temp->right=create_node(data);
+        (temp->right)->left=NULL;
+        (temp->right)->right=NULL;
+
+    }
+   }
+    else
+    {
+        if(temp->left!=NULL)
+        {
+         insert(temp->left,data);
+        }
+
+        else
+        {
+        temp->left=create_node(data);
+        (temp->left)->left=NULL;
+        (temp->left)->right=NULL;
+        }
+    }
+   }
+}
+}
+
+
+template<class T>
+void Tree<T>::Inorder(Node<T> *Root)
+{
+ if(Root!=NULL)
+ {
+ Inorder(Root->left);
+ cout<<Root->key<<" ";
+ Inorder(Root->right);
+ }
+
+}
+
+template<class T>
+void Tree<T>::Preorder(Node<T> *Root)
+{
+ if(Root!=NULL)
+ {
+ cout<<Root->key<<" ";
+ Preorder(Root->left);
+ Preorder(Root->right);
+ }
+
+}
+template<class T>
+void Tree<T>::Postorder(Node<T> *Root)
+{
+ if(Root!=NULL)
+ {
+ Postorder(Root->left);
+ Postorder(Root->right);
+ cout<<Root->key<<" ";
+ }
+}
+template<class T>
+void Tree<T>::morris_inorder(Node<T> *Root)
+{
+ Node<T> *p,*temp;
+ p=Root;
+ while(p!=NULL)
+ {
+     if(p->left==NULL)
+     {
+         cout<<p->key<<" ";
+         p=p->right;
+     }
+     else
+     {
+         temp=p->left;
+         while(temp->right!=NULL && temp->right!=p)
+            temp=temp->right;
+
+          if(temp->right==NULL)
+         {
+             temp->right=p;
+             p=p->left;
+         }
+         else
+         {
+             cout<<p->key<<" ";
+             temp->right=NULL;
+             p=p->right;
+         }
+     }
+ }
+}
+
+template<class T>
+void Tree<T>::morris_preorder(Node<T> *Root)
+{
+ Node<T> *p,*temp;
+ p=Root;
+ while(p!=NULL)
+ {
+     if(p->left==NULL)
+     {
+         cout<<p->key<<" ";
+         p=p->right;
+     }
+     else
+     {
+         temp=p->left;
+         while(temp->right!=NULL && temp->right!=p)
+            temp=temp->right;
+
+          if(temp->right==NULL)
+         {
+             cout<<p->key<<" ";
+             temp->right=p;
+
+             p=p->left;
+         }
+         else
+         {
+
+             temp->right=NULL;
+             p=p->right;
+         }
+     }
+ }
+}
+template<class T>
+Node<T>* Tree<T>::search(Node<T>* Root, T data)
+{
+ if(Root==NULL||Root->key==data)
+    return Root;
+ if(Root->key<data)
+    return search(Root->right,data);
+ if(Root->key>data)
+    return search(Root->left,data);
+
+}
+
+template<class T>
+int count_total_nodes(Node<T>* Root)
+{
+
+    if(Root==NULL)
+        return 0;
+
+    else
+        return count_total_nodes(Root->left)+count_total_nodes(Root->right)+1;
+}
+
+template<class T>
+int count_internal_nodes(Node<T>* Root)
+{
+
+    if(Root==NULL||(Root->left==NULL&&Root->right==NULL))
+        return 0;
+
+    else
+        return count_internal_nodes(Root->left)+count_internal_nodes(Root->right)+1;
+}
+
+template<class T>
+int count_leaf_nodes(Node<T>* Root)
+{
+
+    if(Root==NULL)
+        return 0;
+    else if(Root->left==NULL&&Root->right==NULL)
+        return 1;
+
+    else
+        return count_leaf_nodes(Root->left)+count_leaf_nodes(Root->right);
+}
+template<class T>
+int count_left_nodes(Node<T>* Root)
+{
+  int count=0;
+    if(Root==NULL)
+        return 0;
+
+    if(Root->left!=NULL)
+        count=count+count_left_nodes(Root->left)+1;
+    if(Root->right!=NULL)
+        count=count+count_left_nodes(Root->right);
+    return count;
+}
+
+template<class T>
+int count_right_nodes(Node<T>* Root)
+{
+  int count=0;
+    if(Root==NULL)
+        return 0;
+
+    if(Root->left!=NULL)
+        count=count+count_right_nodes(Root->left);
+    if(Root->right!=NULL)
+        count=count+count_right_nodes(Root->right)+1;
+    return count;
+}
+template<class T>
+int height(Node<T>* Root)
+{
+    if(Root==NULL)
+        return 0;
+
+    else
+    {
+        int h1=height(Root->left);
+        int h2=height(Root->right);
+        return 1+max(h1,h2);
+    }
+}
+
+template<class T>
+T maximum(Node<T>* Root)
+{
+    Node<T>* temp=Root;
+    while(temp->right!=NULL)
+        temp=temp->right;
+    return temp->key;
+}
+
+template<class T>
+T Tree<T>::minimum(Node<T>* Root)
+{
+    Node<T>* temp=Root;
+    while(temp->left!=NULL)
+        temp=temp->left;
+    return temp->key;
+}
+
+template<class T>
+T Tree<T>::inorder_predecessor(Node<T>* Root,T data)
+{
+   Node<T>* temp1=search(Root,data);
+ if(temp1==NULL)
+    return 0;
+ if(temp1->left!=NULL)
+ {
+     Node<T>* temp2=temp1->left;
+     return maximum(temp2);
+ }
+ else
+ {
+    Node<T>* pred=NULL;
+     Node<T>* parent=Root;
+         while(parent!=temp1)
+         {
+             if(temp1->key<parent->key)
+             {
+
+                 parent=parent->left;
+             }
+             else
+                pred=parent;
+                parent=parent->right;
+         }
+    return pred->key;
+ }
+}
+
+template<class T>
+T Tree<T>::inorder_successor(Node<T>* Root,T data)
+{
+ Node<T>* temp1=search(Root,data);
+ if(temp1==NULL)
+    return 0;
+ if(temp1->right!=NULL)
+ {
+     Node<T>* temp2=temp1->right;
+     return minimum(temp2);
+ }
+ else
+ {
+     Node<T>* suc=NULL;
+     Node<T>* parent=Root;
+         while(parent!=temp1)
+         {
+             if(temp1->key<parent->key)
+             {
+                 suc=parent;
+                 parent=parent->left;
+             }
+             else
+                parent=parent->right;
+         }
+    return suc->key;
+ }
+}
+int main()
+{
+ Tree<int> t;
+ t.insert(t.Root,10);
+ t.insert(t.Root,8);
+ t.insert(t.Root,7);
+ t.insert(t.Root,9);
+ t.insert(t.Root,12);
+ t.insert(t.Root,11);
+ t.insert(t.Root,10);
+
+ cout<<endl;
+ t.Preorder(t.Root);
+ cout<<endl;
+ t.Postorder(t.Root);
+ int n=count_total_nodes(t.Root);
+ cout<<"Total number of nodes:"<<n;
+ cout<<endl;
+ n=count_internal_nodes(t.Root);
+ cout<<"Total number of internal nodes:"<<n;
+ cout<<endl;
+ n=count_leaf_nodes(t.Root);
+ cout<<"Total number of leaf nodes:"<<n;
+ cout<<endl;
+ n=height(t.Root);
+ cout<<"height of tree: "<<n;
+ cout<<endl;
+ n=count_left_nodes(t.Root);
+ cout<<"Total number of left nodes"<<n;
+ n=count_right_nodes(t.Root);
+ cout<<"Total number of right nodes"<<n;
+ cout<<endl;
+ cout<<"Maximum key in the tree is: "<<maximum(t.Root);
+ cout<<endl;
+ cout<<"Minimum key in the tree is: "<<t.minimum(t.Root);
+ cout<<endl;
+ cout<<"Enter key to be searched in the tree";
+ cin>>n;
+ int a;
+ Node<int>* p=t.search(t.Root,n);
+ if(p)
+    cout<<n<<" is present in the tree";
+ else
+ cout<<n<<" is not present in the tree";
+ cout<<endl;
+ t.morris_inorder(t.Root);
+ cout<<endl;
+ //t.morris_preorder(t.Root);
+ n=t.inorder_successor(t.Root,3);
+ cout<<"Inorder Successor of 3 is "<<n;
+ n=t.inorder_predecessor(t.Root,10);
+ cout<<"Inorder Predecessor of 10 is "<<n;
+
+ return 0;
+}
